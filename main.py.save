@@ -41,15 +41,15 @@ while True:
             priority = input("Enter priority (high/medium/low): ").strip().lower()
             if priority not in ['high', 'medium', 'low']:
                 print("Error: Invalid priority. Please use 'high', 'medium', or 'low'.")
-        # Collect task due date with encoding fix
+        # Collect task due date
         due = ""
         while True:
-            due = input("Enter due date (e.g., 2025-08-03): ").encode('utf-8').decode('utf-8', errors='ignore').strip()
+            due = input("Enter due date (e.g., 2025-08-01): ").strip()
             try:
                 datetime.strptime(due, '%Y-%m-%d')
                 break
             except ValueError:
-                print("Error: Invalid date format. Please use YYYY-MM-DD (e.g., 2025-08-03).")
+                print("Error: Invalid date format. Please use YYYY-MM-DD (e.g., 2025-08-01).")
         # Add the task and update display
         if agent.add_task(title, priority, due):
             print(f"Success: Task '{title}' added!")

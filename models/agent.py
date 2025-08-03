@@ -11,11 +11,17 @@ class TaskAgent:
             with open(self.data_file, 'r', encoding='utf-8') as file:
                 return json.load(file)['tasks']
         except FileNotFoundError:
-            return []
+            return []  # Return empty list if file doesn't exist
+        except json.JSONDecodeError:
+            return []  # Return empty list if JSON is invalid
 
     def save_tasks(self):
-        with open(self.data_file, 'w', encoding='utf-8') as file:
-            json.dump({'tasks': self.tasks}, file, indent=2, ensure_ascii=False)
+        try:
+            with open(self.data_file, 'w', encoding='utf-8') as file:
+                json.dump({'tasks': self.tasks}, file, indent=2, ensure_ascii=False)
+            print("Tasks saved successfully.")  # Debug message to confirm save
+        except Exception as e:
+            print(f"Error saving tasks: {e}")
 
     def suggest_priority(self, task):
         today = datetime.now().strftime('%Y-%m-%d')
@@ -30,3 +36,4 @@ class TaskAgent:
         new_task = {"id": new_id, "title": title, "priority": priority, "due": due}
         self.tasks.append(new_task)
         self.save_tasks()
+        return True
